@@ -1,0 +1,47 @@
+package com.trustmenet.config;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
+
+@PropertySource("classpath:application.properties")
+@Configuration
+public class DataSourceConfiguration {
+
+    @Autowired
+    private Environment environment;
+
+    @Bean
+    public DataSource postgresDataSource() {
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
+        hikariConfig.setJdbcUrl(environment.getProperty("spring.datasource.url"));
+        hikariConfig.setUsername(environment.getProperty("spring.datasource.username"));
+        hikariConfig.setPassword(environment.getProperty("spring.datasource.password"));
+        try {
+            hikariConfig.setConnectionTimeout(Integer.parseInt(environment.getProperty("spring.datasource.hikari.connection-timeout")));
+            hikariConfig.setMinimumIdle(Integer.parseInt(environment.getProperty("spring.datasource.hikari.minimum-idle")));
+            hikariConfig.setMaximumPoolSize(Integer.parseInt(environment.getProperty("spring.datasource.hikari.maximum-pool-size")));
+            hikariConfig.setIdleTimeout(Integer.parseInt(environment.getProperty("spring.datasource.hikari.idle-timeout")));
+            hikariConfig.setMaxLifetime(Integer.parseInt(environment.getProperty("spring.datasource.hikari.max-lifetime")));
+        } catch (NullPointerException | NumberFormatException e) {
+            return new HikariDataSource(hikariConfig);
+        }
+        return new HikariDataSource(hikariConfig);
+    }
+
+    @Bean
+    public JdbcTemplate postgresJdbcTemplate(DataSource ds) {
+        return new JdbcTemplate(ds);
+    }
+
+}
