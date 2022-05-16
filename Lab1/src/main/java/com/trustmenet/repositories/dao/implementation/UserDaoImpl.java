@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -45,13 +46,11 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
         preparedStatement.setString(2, userDto.getPassword());
         preparedStatement.setString(3, userDto.getMail());
         preparedStatement.setString(4,
-                userDto.getStatus() != null
-                        ? userDto.getStatus().name().toLowerCase()
-                        : UserAccountStatus.UNACTIVATED.name().toLowerCase());
+                Optional.ofNullable(userDto.getStatus()).orElse(UserAccountStatus.UNACTIVATED)
+                        .name().toLowerCase());
         preparedStatement.setString(5,
-                userDto.getRole() != null
-                        ? userDto.getRole().name().toLowerCase()
-                        : Role.USER.name().toLowerCase());
+                Optional.ofNullable(userDto.getRole()).orElse(Role.USER)
+                        .name().toLowerCase());
         preparedStatement.setString(6, userDto.getFirstName());
         preparedStatement.setString(7, userDto.getSecondName());
         if (userDto.getProfile() != null) {
