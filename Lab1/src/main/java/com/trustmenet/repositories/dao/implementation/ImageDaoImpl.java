@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -47,17 +48,14 @@ public class ImageDaoImpl extends GenericDaoImpl<Image> implements ImageDao {
     }
 
 
-    public int getIdBySrc(String src) {
-        Number id;
+    public Optional<Integer> getIdBySrc(String src) {
         log.info("get id");
         try {
-            id = jdbcTemplate.queryForObject(imageQueries.get("getIdBySrc"),
-                    new Object[]{src}, Integer.class);
+            return Optional.ofNullable(jdbcTemplate.queryForObject(imageQueries.get("getIdBySrc"),
+                    new Object[]{src}, Integer.class));
         } catch (NullPointerException | EmptyResultDataAccessException e) {
-            log.info(e.getMessage());
-            return -1;
+            return Optional.empty();
         }
-        return id != null ? id.intValue() : -1;
     }
 
 }

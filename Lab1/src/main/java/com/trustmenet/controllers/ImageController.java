@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("api/v1/image")
 public class ImageController {
@@ -16,7 +18,7 @@ public class ImageController {
     private ImageService imageService;
 
     @PutMapping
-    public int saveImage(@RequestParam("myFile") MultipartFile file) {
+    public int saveImage(@RequestParam("myFile") @NotNull MultipartFile file) {
         return imageService.addImage(file);
     }
 }
