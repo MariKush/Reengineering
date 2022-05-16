@@ -32,7 +32,6 @@ public class MessageController {
         Gson gson = new Gson();
         Message msg = gson.fromJson(message, Message.class);
 
-        System.out.println(msg);
         log.info(message);
         Message sm = messageService.saveMessage(msg);
 
