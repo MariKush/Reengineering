@@ -15,43 +15,41 @@ public class ChatService {
     private ChatDao chatDao;
 
     public List<Chat> getAllChatsForUser(int userId) {
-        if (userId == 0) {
-            log.warn("User id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be user`s identifier");
-        }
+        validateUserIdNotZero(userId);
         return chatDao.getAllFullInfoForUser(userId);
     }
 
+
     public Chat getFullChatInfo(int chatId) {
-        if (chatId == 0) {
-            log.warn("Chat id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be chat`s identifier");
-        }
+        validateChatId(chatId);
         return chatDao.getFullInfo(chatId);
     }
 
     public void addMemberToChat(int chatId, int userId) {
-        if (chatId == 0) {
-            log.warn("Chat id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be chat`s identifier");
-        }
-        if (userId == 0) {
-            log.warn("User id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be user`s identifier");
-        }
+        validateUserIdNotZero(userId);
+        validateChatId(chatId);
         chatDao.addChatMember(chatId, userId);
     }
 
     public void removeMemberFromChat(int chatId, int userId) {
-        if (chatId == 0) {
-            log.warn("Chat id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be chat`s identifier");
-        }
-        if (userId == 0) {
-            log.warn("User id can`t be 0");
-            throw new IllegalArgumentException("0 can`t be user`s identifier");
-        }
+        validateChatId(chatId);
+        validateUserIdNotZero(userId);
         chatDao.removeChatMember(chatId, userId);
+    }
+
+    private void validateChatId(int chatId) {
+        validateIdNotZero(chatId, "Chat id can`t be 0", "0 can`t be chat`s identifier");
+    }
+
+    private void validateUserIdNotZero(int userId) {
+        validateIdNotZero(userId, "User id can`t be 0", "0 can`t be user`s identifier");
+    }
+
+    private void validateIdNotZero(int userId, String s, String s2) {
+        if (userId == 0) {
+            log.warn(s);
+            throw new IllegalArgumentException(s2);
+        }
     }
 
     public int createChat(Chat chat, int userId) {
