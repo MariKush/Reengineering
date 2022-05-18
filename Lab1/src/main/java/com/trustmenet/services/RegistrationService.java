@@ -26,6 +26,9 @@ public class RegistrationService {
     @Value("#{${defaultImageId}}")
     private int defaultId;
 
+    @Value("#{${recoveryUrl}}")
+    private int recoveryUrl;
+
     @Autowired
     private UserDao userDao;
 
@@ -50,14 +53,7 @@ public class RegistrationService {
             return;
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        user.setRole(Role.USER);
-        user.setStatus(UserAccountStatus.UNACTIVATED);
-
-        user.setRating(0);
-        user.setProfile("");
-        user.setImageId(defaultId);
+        setDefaultUserProperties(user);
 
         int id = userDao.save(user);
         user.setId(id);
@@ -68,6 +64,17 @@ public class RegistrationService {
                 .build();
         tokenService.saveToken(tokenForNewUser);
         mailService.sendRegistrationMessage(user.getMail(), user.getLogin(), "https://trust-me-net.herokuapp.com/#/registration/" + tokenForNewUser.getToken());
+    }
+
+    private void setDefaultUserProperties(UserDto user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        user.setRole(Role.USER);
+        user.setStatus(UserAccountStatus.UNACTIVATED);
+
+        user.setRating(0);
+        user.setProfile("");
+        user.setImageId(defaultId);
     }
 
     @Transactional
@@ -112,7 +119,7 @@ public class RegistrationService {
                 .build();
 
         tokenService.saveToken(token);
-        mailService.sendRecoveryPasswordMessage(user.getMail(), user.getLogin(), "https://trust-me-net.herokuapp.com/#/recovery/" + token.getToken());
+        mailService.sendRecoveryPasswordMessage(user.getMail(), user.getLogin(), recoveryUrl + token.getToken());
         return true;
     }
 

@@ -4,7 +4,6 @@ package com.trustmenet.controllers;
 import com.trustmenet.repositories.entities.UserDto;
 import com.trustmenet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -63,9 +62,7 @@ public class UserController {
 
     @GetMapping("/users/{id}/friends")
     public List<UserDto> getFriends(@PathVariable int id) {
-        List<UserDto> u = userService.getUserFriends(id);
-        System.out.println("sss");
-        return u;
+        return userService.getUserFriends(id);
     }
 
     @PostMapping("/users/appointToModer")

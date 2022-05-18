@@ -42,14 +42,12 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 
     @Override
     public T get(int id) {
-        T object;
         try {
-            object = jdbcTemplate.queryForObject(String.format(genericQueries.get("get"), tableName),
+            return jdbcTemplate.queryForObject(String.format(genericQueries.get("get"), tableName),
                     new Object[]{id}, rowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-        return object;
     }
 
     protected abstract String getInsertQuery();

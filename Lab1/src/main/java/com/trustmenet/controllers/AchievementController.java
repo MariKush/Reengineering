@@ -7,6 +7,7 @@ import com.trustmenet.services.AchievementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class AchievementController {
     }
 
     @PostMapping("/achievement/create")
-    public boolean createAchievement(@RequestBody Achievement achievement) {
+    public boolean createAchievement(@RequestBody @Valid Achievement achievement) {
         return achievementService.createAchievement(achievement);
     }
 

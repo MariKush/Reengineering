@@ -41,10 +41,6 @@ public class AchievementService {
     }
 
     public boolean createAchievement(Achievement achievement) {
-        if (achievement.getAchievementConditions().isEmpty()) {
-            return false;
-        }
-
         int achievementId = achievementDao.save(achievement);
 
         for (AchievementCondition achievementCondition : achievement.getAchievementConditions()) {
@@ -65,21 +61,27 @@ public class AchievementService {
             return;
         }
 
+        insertNewAchievements(beforeUpdateAchievements, afterUpdateAchievements);
+        deleteOldAchievements(beforeUpdateAchievements, afterUpdateAchievements);
+    }
+
+    private void insertNewAchievements(List<UserAchievement> beforeUpdateAchievements, List<UserAchievement> afterUpdateAchievements) {
         List<UserAchievement> toInsert = afterUpdateAchievements.stream()
                 .filter(userAchievement -> !beforeUpdateAchievements.contains(userAchievement))
                 .collect(Collectors.toList());
+        if (!toInsert.isEmpty()) {
+            userAchievementsDao.insert(toInsert);
+        }
+    }
+
+    private void deleteOldAchievements(List<UserAchievement> beforeUpdateAchievements, List<UserAchievement> afterUpdateAchievements) {
         List<Integer> toDelete = beforeUpdateAchievements.stream()
                 .filter(userAchievement -> !afterUpdateAchievements.contains(userAchievement))
                 .map(UserAchievement::getAchievementId)
                 .collect(Collectors.toList());
 
-
         if (!toDelete.isEmpty()) {
             userAchievementsDao.delete(toDelete);
         }
-        if (!toInsert.isEmpty()) {
-            userAchievementsDao.insert(toInsert);
-        }
-
     }
 }

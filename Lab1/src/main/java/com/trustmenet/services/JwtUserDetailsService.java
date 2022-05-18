@@ -4,6 +4,7 @@ import com.trustmenet.repositories.dao.UserDao;
 import com.trustmenet.repositories.entities.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         UserDetails userDetails = null;
         try {
             if (user.getLogin().equals(username)) {
-                userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getAuthority(user));
+                userDetails = new User(user.getLogin(), user.getPassword(), getAuthority(user));
             }
         } catch (NullPointerException npe) {
             throw new UsernameNotFoundException("User not found with username: " + username);

@@ -9,8 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 public class MessageService {
@@ -28,7 +26,7 @@ public class MessageService {
             log.warn("Chat id can`t be 0");
             throw new IllegalArgumentException("0 can`t be chat`s identifier");
         }
-        return messageDao.getMessagesFromChat(chatId, PageRequest.of(page, size,
-                Sort.Direction.ASC, "creationDate"));
+        return messageDao.getMessagesFromChat(chatId,
+                PageRequest.of(page, size, Sort.Direction.ASC, "creationDate"));
     }
 }

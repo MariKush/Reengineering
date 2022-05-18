@@ -28,12 +28,7 @@ public class AchievementExtractor implements ResultSetExtractor<List<Achievement
             Achievement achievement = achievementMap.get(achievementId);
 
             if (achievement == null) {
-                achievement = Achievement.builder()
-                        .id(achievementId)
-                        .name(rs.getString("achievement_name"))
-                        .description(rs.getString("description"))
-                        .achievementConditions(new ArrayList<>())
-                        .build();
+                achievement = buildAchievement(rs, achievementId);
                 achievementMap.put(achievementId, achievement);
             }
 
@@ -41,23 +36,11 @@ public class AchievementExtractor implements ResultSetExtractor<List<Achievement
             AchievementCharacteristic characteristic = achievementCharacteristicMap.get(characteristicId);
 
             if (characteristic == null) {
-                characteristic = AchievementCharacteristic.builder()
-                        .id(characteristicId)
-                        .name(rs.getString("achievement_characteristic_name"))
-                        .sqlScript(rs.getString("script"))
-                        .build();
+                characteristic = buildAchievementCharacterisitc(rs, characteristicId);
                 achievementCharacteristicMap.put(characteristicId, characteristic);
             }
 
-            int conditionId = rs.getInt("achievement_condition_id");
-            AchievementCondition condition = AchievementCondition.builder()
-                    .achievementId(achievementId)
-                    .id(conditionId)
-                    .operator(ConditionOperator.valueOf(rs.getString("operator").toUpperCase()))
-                    .characteristicId(characteristicId)
-                    .value(rs.getInt("value"))
-                    .characteristic(characteristic)
-                    .build();
+            AchievementCondition condition = buildAchievementCondition(rs, achievementId, characteristicId, characteristic);
 
             achievement.getAchievementConditions().add(condition);
         }
@@ -65,5 +48,32 @@ public class AchievementExtractor implements ResultSetExtractor<List<Achievement
         return new ArrayList<>(achievementMap.values());
     }
 
+    private Achievement buildAchievement(ResultSet rs, int achievementId) throws SQLException {
+        return Achievement.builder()
+                .id(achievementId)
+                .name(rs.getString("achievement_name"))
+                .description(rs.getString("description"))
+                .achievementConditions(new ArrayList<>())
+                .build();
+    }
+
+    private AchievementCharacteristic buildAchievementCharacterisitc(ResultSet rs, int characteristicId) throws SQLException {
+        return AchievementCharacteristic.builder()
+                .id(characteristicId)
+                .name(rs.getString("achievement_characteristic_name"))
+                .sqlScript(rs.getString("script"))
+                .build();
+    }
+
+    private AchievementCondition buildAchievementCondition(ResultSet rs, int achievementId, int characteristicId, AchievementCharacteristic characteristic) throws SQLException {
+        return AchievementCondition.builder()
+                .achievementId(achievementId)
+                .id(rs.getInt("achievement_condition_id"))
+                .operator(ConditionOperator.valueOf(rs.getString("operator").toUpperCase()))
+                .characteristicId(characteristicId)
+                .value(rs.getInt("value"))
+                .characteristic(characteristic)
+                .build();
+    }
 }
 
