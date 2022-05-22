@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class MessageController {
     private MessageService messageService;
 
     @MessageMapping("/{chatId}")
-    public void receiveMessage(@DestinationVariable String chatId, String message) {
+    public void receiveMessage(@DestinationVariable String chatId, @Valid String message) {
         Gson gson = new Gson();
         Message msg = gson.fromJson(message, Message.class);
 

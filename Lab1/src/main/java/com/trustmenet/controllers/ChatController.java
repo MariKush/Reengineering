@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -31,12 +32,12 @@ public class ChatController {
     }
 
     @PutMapping("/chat")
-    public void updateChat(@RequestBody ChatDto chat) {
+    public void updateChat(@RequestBody @Valid ChatDto chat) {
         chatService.updateChat(chat);
     }
 
     @PostMapping("/users/{id}/createChat")
-    public int createChat(@PathVariable int id, @RequestBody ChatDto chat) {
+    public int createChat(@PathVariable int id, @RequestBody @Valid ChatDto chat) {
         return chatService.createChat(chat, id);
     }
 

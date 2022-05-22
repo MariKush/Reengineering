@@ -7,6 +7,7 @@ import com.trustmenet.services.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,12 +18,12 @@ public class AnnouncementController {
     private AnnouncementService announcementService;
 
     @PostMapping("/announcement")
-    public int createAnnouncement(@RequestBody AnnouncementDto announcement) {
+    public int createAnnouncement(@RequestBody @Valid AnnouncementDto announcement) {
         return announcementService.createAnnouncement(announcement);
     }
 
     @PutMapping("/announcement")
-    public void updateAnnouncement(@RequestBody AnnouncementDto announcement) {
+    public void updateAnnouncement(@RequestBody @Valid AnnouncementDto announcement) {
         announcementService.updateAnnouncement(announcement);
     }
 

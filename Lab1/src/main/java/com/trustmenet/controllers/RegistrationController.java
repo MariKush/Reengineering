@@ -6,6 +6,8 @@ import com.trustmenet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1")
 public class RegistrationController {
@@ -15,7 +17,7 @@ public class RegistrationController {
 
 
     @PostMapping("/registration")
-    public UserDto registration(@RequestBody UserDto user) {
+    public UserDto registration(@RequestBody @Valid UserDto user) {
         registrationService.registerUser(user);
         return user;
     }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 @Data
@@ -18,6 +19,6 @@ public class MessageDto {
     private int authorId;
     private UserDto author;
     private Timestamp creationDate;
-    @NotEmpty
+    @Size(min = 6, max = 1000)
     private String messageText;
 }
