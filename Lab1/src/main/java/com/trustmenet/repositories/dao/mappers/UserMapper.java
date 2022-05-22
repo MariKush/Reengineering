@@ -1,6 +1,5 @@
 package com.trustmenet.repositories.dao.mappers;
 
-import com.trustmenet.repositories.entities.Image;
 import com.trustmenet.repositories.entities.UserDto;
 import com.trustmenet.repositories.entities.enums.Role;
 import com.trustmenet.repositories.entities.enums.UserAccountStatus;
@@ -26,7 +25,6 @@ public class UserMapper implements RowMapper<UserDto> {
                 .status(UserAccountStatus.valueOf(resultSet.getString("status").toUpperCase()))
                 .role(Role.valueOf(resultSet.getString("role").toUpperCase()))
                 .imageId(resultSet.getInt("image_id"))
-                .image(new Image(resultSet.getInt("image_id"), resultSet.getString("src")))
                 .build();
     }
 }

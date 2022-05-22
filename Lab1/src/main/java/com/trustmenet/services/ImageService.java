@@ -44,5 +44,9 @@ public class ImageService {
 
         return imageId.orElseGet(() -> imageDao.save(Image.builder().src(encodedFile).build()));
     }
+
+    public byte[] getImage(int id) {
+        return Base64.getDecoder().decode(imageDao.get(id).getSrc());
+    }
 }
 

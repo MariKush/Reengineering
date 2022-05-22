@@ -1,7 +1,6 @@
 package com.trustmenet.repositories.dao.mappers.extractors;
 
 import com.trustmenet.repositories.entities.Announcement;
-import com.trustmenet.repositories.entities.Image;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -28,12 +27,6 @@ public class AnnouncementExtractor implements ResultSetExtractor<List<Announceme
                     .fullText(resultSet.getString("full_text"))
                     .createdDate(resultSet.getTimestamp("created_date"))
                     .imageId(resultSet.getInt("image_id"))
-                    .image(
-                            Image.builder()
-                                    .id(resultSet.getInt("image_id"))
-                                    .src(resultSet.getString("src"))
-                                    .build()
-                    )
                     .build();
             announcements.put(resultSet.getInt("id"), announcement);
         }

@@ -23,5 +23,4 @@ public class Announcement {
     private String subtitle;
     private String fullText;
     private int imageId;
-    private Image image;
 }

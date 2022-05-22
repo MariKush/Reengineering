@@ -37,8 +37,5 @@ public class UserDto {
     private Role role;
 
     private int imageId;
-
-    private Image image;
-
 }
 
