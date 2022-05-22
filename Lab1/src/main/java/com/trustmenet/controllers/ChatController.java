@@ -1,11 +1,12 @@
 package com.trustmenet.controllers;
 
-import com.trustmenet.repositories.entities.Chat;
+import com.trustmenet.repositories.dto.ChatDto;
 import com.trustmenet.services.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -16,12 +17,12 @@ public class ChatController {
     private ChatService chatService;
 
     @GetMapping("/users/{userId}/chats")
-    public List<Chat> getUserChats(@PathVariable int userId) {
+    public List<ChatDto> getUserChats(@PathVariable int userId) {
         return chatService.getAllChatsForUser(userId);
     }
 
     @GetMapping("/chat/{chatId}")
-    public Chat getChatById(@PathVariable int chatId) {
+    public ChatDto getChatById(@PathVariable int chatId) {
         return chatService.getFullChatInfo(chatId);
     }
 
@@ -31,12 +32,12 @@ public class ChatController {
     }
 
     @PutMapping("/chat")
-    public void updateChat(@RequestBody Chat chat) {
+    public void updateChat(@RequestBody @Valid ChatDto chat) {
         chatService.updateChat(chat);
     }
 
     @PostMapping("/users/{id}/createChat")
-    public int createChat(@PathVariable int id, @RequestBody Chat chat) {
+    public int createChat(@PathVariable int id, @RequestBody @Valid ChatDto chat) {
         return chatService.createChat(chat, id);
     }
 

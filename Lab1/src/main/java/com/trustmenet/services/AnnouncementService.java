@@ -1,9 +1,11 @@
 package com.trustmenet.services;
 
+import com.trustmenet.mapper.AnnouncementMapper;
 import com.trustmenet.repositories.dao.AnnouncementDao;
+import com.trustmenet.repositories.dto.AnnouncementDto;
+import com.trustmenet.repositories.dto.UserDto;
 import com.trustmenet.repositories.entities.Announcement;
-import com.trustmenet.repositories.entities.UserDto;
-import com.trustmenet.repositories.entities.enums.Role;
+import com.trustmenet.repositories.enums.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +29,11 @@ public class AnnouncementService {
 
     @Value("#{${defaultRatingMin}}")
     private int ratingMinValue;
+    @Autowired
+    private AnnouncementMapper announcementMapper;
 
-    public int createAnnouncement(Announcement announcement) {
+    public int createAnnouncement(AnnouncementDto announcementDto) {
+        Announcement announcement = announcementMapper.toEntity(announcementDto);
         UserDto author = userService.getUserById(announcement.getAuthorId());
         if (author.getRole() != Role.USER || author.getRating() >= ratingMinValue) {
             announcement.setPublished(true);
@@ -45,7 +50,8 @@ public class AnnouncementService {
         return announcementId;
     }
 
-    public void updateAnnouncement(Announcement announcement) {
+    public void updateAnnouncement(AnnouncementDto announcementDto) {
+        Announcement announcement = announcementMapper.toEntity(announcementDto);
         if (announcement == null) {
             log.info("updateAnnouncement: Announcement is null");
             return;
@@ -61,17 +67,12 @@ public class AnnouncementService {
         announcementDao.deleteById(announcementId);
     }
 
-    public Announcement getAnnouncementById(int announcementId) {
-        return announcementDao.getById(announcementId);
+    public AnnouncementDto getAnnouncementById(int announcementId) {
+        return announcementMapper.toDto(announcementDao.getById(announcementId));
     }
 
-    public List<Announcement> getAllAnnouncements() {
-        return announcementDao.getAllInfo();
-    }
-
-
-    public List<Announcement> getAllAnnouncements(boolean isPublished) {
-        return announcementDao.getAllInfo(isPublished);
+    public List<AnnouncementDto> getAllAnnouncements(boolean isPublished) {
+        return announcementMapper.toDto(announcementDao.getAllInfo(isPublished));
     }
 
 

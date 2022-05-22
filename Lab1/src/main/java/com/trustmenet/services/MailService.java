@@ -1,6 +1,6 @@
 package com.trustmenet.services;
 
-import com.trustmenet.repositories.entities.enums.MessageInfo;
+import com.trustmenet.repositories.enums.MessageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

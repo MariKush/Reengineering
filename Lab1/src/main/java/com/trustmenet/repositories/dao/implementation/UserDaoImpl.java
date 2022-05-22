@@ -3,9 +3,10 @@ package com.trustmenet.repositories.dao.implementation;
 
 import com.trustmenet.repositories.dao.UserDao;
 import com.trustmenet.repositories.dao.mappers.UserMapper;
-import com.trustmenet.repositories.entities.UserDto;
-import com.trustmenet.repositories.entities.enums.Role;
-import com.trustmenet.repositories.entities.enums.UserAccountStatus;
+import com.trustmenet.repositories.entities.User;
+import com.trustmenet.repositories.entities.User;
+import com.trustmenet.repositories.enums.Role;
+import com.trustmenet.repositories.enums.UserAccountStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @PropertySource("classpath:user.properties")
-public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
+public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
 
     @Value("#{${sql.users}}")
     private Map<String, String> usersQueries;
@@ -41,25 +42,25 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    protected PreparedStatement getInsertPreparedStatement(PreparedStatement preparedStatement, UserDto userDto) throws SQLException {
-        preparedStatement.setString(1, userDto.getLogin());
-        preparedStatement.setString(2, userDto.getPassword());
-        preparedStatement.setString(3, userDto.getMail());
+    protected PreparedStatement getInsertPreparedStatement(PreparedStatement preparedStatement, User User) throws SQLException {
+        preparedStatement.setString(1, User.getLogin());
+        preparedStatement.setString(2, User.getPassword());
+        preparedStatement.setString(3, User.getMail());
         preparedStatement.setString(4,
-                Optional.ofNullable(userDto.getStatus()).orElse(UserAccountStatus.UNACTIVATED)
+                Optional.ofNullable(User.getStatus()).orElse(UserAccountStatus.UNACTIVATED)
                         .name().toLowerCase());
         preparedStatement.setString(5,
-                Optional.ofNullable(userDto.getRole()).orElse(Role.USER)
+                Optional.ofNullable(User.getRole()).orElse(Role.USER)
                         .name().toLowerCase());
-        preparedStatement.setString(6, userDto.getFirstName());
-        preparedStatement.setString(7, userDto.getSecondName());
-        if (userDto.getProfile() != null) {
-            preparedStatement.setString(8, userDto.getProfile());
+        preparedStatement.setString(6, User.getFirstName());
+        preparedStatement.setString(7, User.getSecondName());
+        if (User.getProfile() != null) {
+            preparedStatement.setString(8, User.getProfile());
         } else {
             preparedStatement.setNull(8, Types.VARCHAR);
         }
-        preparedStatement.setInt(9, userDto.getRating());
-        preparedStatement.setInt(10, userDto.getImageId());
+        preparedStatement.setInt(9, User.getRating());
+        preparedStatement.setInt(10, User.getImageId());
         return preparedStatement;
     }
 
@@ -69,67 +70,67 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    protected Object[] getUpdateParameters(UserDto userDto) {
-        return new Object[]{userDto.getLogin(), userDto.getPassword(), userDto.getMail(),
-                userDto.getStatus().name().toLowerCase(), userDto.getRole().name().toLowerCase(),
-                userDto.getFirstName(), userDto.getSecondName(), userDto.getRegistrationDate(),
-                userDto.getProfile(), userDto.getRating(), userDto.getImageId(),
-                userDto.getId()};
+    protected Object[] getUpdateParameters(User User) {
+        return new Object[]{User.getLogin(), User.getPassword(), User.getMail(),
+                User.getStatus().name().toLowerCase(), User.getRole().name().toLowerCase(),
+                User.getFirstName(), User.getSecondName(), User.getRegistrationDate(),
+                User.getProfile(), User.getRating(), User.getImageId(),
+                User.getId()};
     }
 
     @Override
-    public List<UserDto> getAll() {
+    public List<User> getAll() {
         return jdbcTemplate.query(usersQueries.get("getAllUsers"), new UserMapper());
     }
 
     @Override
-    public UserDto get(int id) {
-        UserDto userDto;
+    public User get(int id) {
+        User User;
         try {
-            userDto = jdbcTemplate.queryForObject(usersQueries.get("getUser"),
+            User = jdbcTemplate.queryForObject(usersQueries.get("getUser"),
                     new Object[]{id}, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-        return userDto;
+        return User;
     }
 
     @Override
-    public UserDto getUserByLoginAndPassword(String login, String password) {
-        UserDto userDto;
+    public User getUserByLoginAndPassword(String login, String password) {
+        User User;
         try {
-            userDto = jdbcTemplate.queryForObject(usersQueries.get("selectByLoginAndPassword"),
+            User = jdbcTemplate.queryForObject(usersQueries.get("selectByLoginAndPassword"),
                     new Object[]{login, password}, new UserMapper()
             );
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-        return userDto;
+        return User;
     }
 
     @Override
-    public UserDto getUserByMail(String mail) {
-        UserDto userDto;
+    public User getUserByMail(String mail) {
+        User User;
         try {
-            userDto = jdbcTemplate.queryForObject(usersQueries.get("selectByMail"),
+            User = jdbcTemplate.queryForObject(usersQueries.get("selectByMail"),
                     new Object[]{mail}, new UserMapper());
         } catch (NullPointerException | EmptyResultDataAccessException e) {
             return null;
         }
-        return userDto;
+        return User;
     }
 
     @Override
-    public UserDto getUserByLogin(String login) {
-        UserDto userDto;
+    public User getUserByLogin(String login) {
+        User User;
         try {
-            userDto = jdbcTemplate.queryForObject(usersQueries.get("selectByLogin"),
+            User = jdbcTemplate.queryForObject(usersQueries.get("selectByLogin"),
                     new Object[]{login}, new UserMapper()
             );
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-        return userDto;
+        return User;
     }
 
     @Override
@@ -154,7 +155,7 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    public List<UserDto> getUserFriends(int userId) {
+    public List<User> getUserFriends(int userId) {
         return jdbcTemplate.query(
                 friendsQueries.get("getUserFriends"),
                 new Object[]{userId}, new UserMapper()
@@ -162,7 +163,7 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    public List<UserDto> searchUsersByLogin(String login) {
+    public List<User> searchUsersByLogin(String login) {
         login = '%' + login + '%';
         return jdbcTemplate.query(
                 usersQueries.get("searchUsersByLogin"),
@@ -171,7 +172,7 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    public List<UserDto> searchUsersByLogin(String login, Role role) {
+    public List<User> searchUsersByLogin(String login, Role role) {
         login = '%' + login + '%';
         return jdbcTemplate.query(
                 usersQueries.get("searchUsersByLogin").replace(";", " AND role = cast(? AS user_role);"),
@@ -180,7 +181,7 @@ public class UserDaoImpl extends GenericDaoImpl<UserDto> implements UserDao {
     }
 
     @Override
-    public List<UserDto> getUsersPage(int limit, int offset) {
+    public List<User> getUsersPage(int limit, int offset) {
         return jdbcTemplate.query(
                 usersQueries.get("getNextUserPage"),
                 new Object[]{limit, offset}, new UserMapper()

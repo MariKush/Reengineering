@@ -1,10 +1,12 @@
 package com.trustmenet.controllers;
 
-import com.trustmenet.repositories.entities.UserDto;
+import com.trustmenet.repositories.dto.UserDto;
 import com.trustmenet.services.RegistrationService;
 import com.trustmenet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1")
@@ -15,8 +17,7 @@ public class RegistrationController {
 
 
     @PostMapping("/registration")
-    public UserDto registration(@RequestBody UserDto user) {
-        System.out.println(user);
+    public UserDto registration(@RequestBody @Valid UserDto user) {
         registrationService.registerUser(user);
         return user;
     }

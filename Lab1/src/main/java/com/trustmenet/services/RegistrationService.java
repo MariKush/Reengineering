@@ -1,12 +1,14 @@
 package com.trustmenet.services;
 
 import com.trustmenet.config.JWTUtils;
+import com.trustmenet.mapper.UserMapper;
 import com.trustmenet.repositories.dao.UserDao;
+import com.trustmenet.repositories.dto.UserDto;
 import com.trustmenet.repositories.entities.Token;
-import com.trustmenet.repositories.entities.UserDto;
-import com.trustmenet.repositories.entities.enums.Role;
-import com.trustmenet.repositories.entities.enums.TokenType;
-import com.trustmenet.repositories.entities.enums.UserAccountStatus;
+import com.trustmenet.repositories.entities.User;
+import com.trustmenet.repositories.enums.Role;
+import com.trustmenet.repositories.enums.TokenType;
+import com.trustmenet.repositories.enums.UserAccountStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -46,9 +48,12 @@ public class RegistrationService {
 
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional
-    public void registerUser(UserDto user) {
+    public void registerUser(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
         if (userDao.getUserByLogin(user.getLogin()) != null || userDao.getUserByMail(user.getMail()) != null) {
             return;
         }
@@ -66,7 +71,7 @@ public class RegistrationService {
         mailService.sendRegistrationMessage(user.getMail(), user.getLogin(), "https://trust-me-net.herokuapp.com/#/registration/" + tokenForNewUser.getToken());
     }
 
-    private void setDefaultUserProperties(UserDto user) {
+    private void setDefaultUserProperties(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         user.setRole(Role.USER);
@@ -88,14 +93,14 @@ public class RegistrationService {
             return false;
         }
         tokenService.delete(token);
-        UserDto user = userDao.get(id);
+        User user = userDao.get(id);
         user.setStatus(UserAccountStatus.ACTIVATED);
         userDao.update(user);
         return true;
     }
 
     public String login(String login, String password) {
-        UserDto user = userDao.getUserByLogin(login);
+        User user = userDao.getUserByLogin(login);
 
         if (user == null || !passwordEncoder.matches(password, user.getPassword())
                 || user.getStatus().equals(UserAccountStatus.UNACTIVATED)) {
@@ -108,7 +113,7 @@ public class RegistrationService {
     }
 
     public boolean passwordRecovery(String email) {
-        UserDto user = userDao.getUserByMail(email);
+        User user = userDao.getUserByMail(email);
         if (user == null) {
             return false;
         }
@@ -143,7 +148,7 @@ public class RegistrationService {
             return false;
         }
         tokenService.delete(token);
-        UserDto user = userDao.get(id);
+        User user = userDao.get(id);
         user.setPassword(passwordEncoder.encode(password));
         userDao.update(user);
         return true;

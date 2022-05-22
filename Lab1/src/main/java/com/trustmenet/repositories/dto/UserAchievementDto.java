@@ -1,8 +1,7 @@
-package com.trustmenet.repositories.entities;
+package com.trustmenet.repositories.dto;
 
 
-import com.trustmenet.repositories.dto.AchievementDto;
-import com.trustmenet.repositories.dto.UserDto;
+import com.trustmenet.repositories.entities.Achievement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,15 +13,11 @@ import java.util.Date;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserAchievement {
-    @EqualsAndHashCode.Exclude
+public class UserAchievementDto {
     private int id;
     private int userId;
-    @EqualsAndHashCode.Exclude
     private UserDto user;
     private int achievementId;
-    @EqualsAndHashCode.Exclude
     private AchievementDto achievement;
-    @EqualsAndHashCode.Exclude
     private Date date;
 }

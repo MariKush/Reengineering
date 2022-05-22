@@ -1,11 +1,13 @@
 package com.trustmenet.controllers;
 
 
+import com.trustmenet.repositories.dto.AnnouncementDto;
 import com.trustmenet.repositories.entities.Announcement;
 import com.trustmenet.services.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,17 +18,17 @@ public class AnnouncementController {
     private AnnouncementService announcementService;
 
     @PostMapping("/announcement")
-    public int createAnnouncement(@RequestBody Announcement announcement) {
+    public int createAnnouncement(@RequestBody @Valid AnnouncementDto announcement) {
         return announcementService.createAnnouncement(announcement);
     }
 
     @PutMapping("/announcement")
-    public void updateAnnouncement(@RequestBody Announcement announcement) {
+    public void updateAnnouncement(@RequestBody @Valid AnnouncementDto announcement) {
         announcementService.updateAnnouncement(announcement);
     }
 
     @GetMapping("/announcement/{id}")
-    public Announcement getAnnouncement(@PathVariable int id) {
+    public AnnouncementDto getAnnouncement(@PathVariable int id) {
         return announcementService.getAnnouncementById(id);
     }
 
@@ -36,7 +38,7 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements")
-    public List<Announcement> getAnnouncements(@RequestParam(value = "isPublished") boolean isPublished) {
+    public List<AnnouncementDto> getAnnouncements(@RequestParam(value = "isPublished") boolean isPublished) {
         return announcementService.getAllAnnouncements(isPublished);
     }
 }

@@ -1,8 +1,8 @@
 package com.trustmenet.controllers;
 
 
-import com.trustmenet.repositories.entities.Achievement;
-import com.trustmenet.repositories.entities.AchievementCharacteristic;
+import com.trustmenet.repositories.dto.AchievementCharacteristicDto;
+import com.trustmenet.repositories.dto.AchievementDto;
 import com.trustmenet.services.AchievementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +18,17 @@ public class AchievementController {
     private AchievementService achievementService;
 
     @GetMapping("/profile/{id}/achievements/")
-    public List<Achievement> getUserAchievement(@PathVariable int id) {
+    public List<AchievementDto> getUserAchievement(@PathVariable int id) {
         return achievementService.getAchievementsByUserId(id);
     }
 
     @GetMapping("/achievement/characteristics")
-    public List<AchievementCharacteristic> getAchievementCharacteristics() {
+    public List<AchievementCharacteristicDto> getAchievementCharacteristics() {
         return achievementService.getAllAchievementCharacteristics();
     }
 
     @PostMapping("/achievement/create")
-    public boolean createAchievement(@RequestBody @Valid Achievement achievement) {
+    public boolean createAchievement(@RequestBody @Valid AchievementDto achievement) {
         return achievementService.createAchievement(achievement);
     }
 

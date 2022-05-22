@@ -2,7 +2,7 @@ package com.trustmenet.repositories.dao.implementation;
 
 import com.trustmenet.repositories.dao.TokenDao;
 import com.trustmenet.repositories.entities.Token;
-import com.trustmenet.repositories.entities.enums.TokenType;
+import com.trustmenet.repositories.enums.TokenType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
