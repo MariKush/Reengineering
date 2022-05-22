@@ -1,4 +1,4 @@
-package com.trustmenet.repositories.entities;
+package com.trustmenet.repositories.dto;
 
 import com.trustmenet.repositories.enums.TokenType;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class Token {
+public class TokenDto {
     private String token;
     private TokenType tokenType;
     private Date expiredDate;

@@ -1,33 +1,33 @@
 package com.trustmenet.repositories.dao;
 
 
-import com.trustmenet.repositories.entities.UserDto;
-import com.trustmenet.repositories.entities.enums.Role;
-import com.trustmenet.repositories.entities.enums.UserAccountStatus;
+import com.trustmenet.repositories.entities.User;
+import com.trustmenet.repositories.enums.Role;
+import com.trustmenet.repositories.enums.UserAccountStatus;
 
 import java.util.List;
 
-public interface UserDao extends GenericDao<UserDto> {
+public interface UserDao extends GenericDao<User> {
 
     String TABLE_NAME = "users";
 
-    UserDto getUserByLoginAndPassword(String login, String password);
+    User getUserByLoginAndPassword(String login, String password);
 
-    UserDto getUserByMail(String mail);
+    User getUserByMail(String mail);
 
-    UserDto getUserByLogin(String login);
+    User getUserByLogin(String login);
 
     boolean addUserFriend(int userId, int friendId);
 
     void deleteUserFriend(int userId, int friendId);
 
-    List<UserDto> getUserFriends(int userId);
+    List<User> getUserFriends(int userId);
 
-    List<UserDto> searchUsersByLogin(String login);
+    List<User> searchUsersByLogin(String login);
 
-    List<UserDto> searchUsersByLogin(String login, Role role);
+    List<User> searchUsersByLogin(String login, Role role);
 
-    List<UserDto> getUsersPage(int limit, int offset);
+    List<User> getUsersPage(int limit, int offset);
 
     boolean checkUsersFriendship(int firstUserId, int secondUserId);
 

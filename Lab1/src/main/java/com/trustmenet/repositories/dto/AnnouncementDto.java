@@ -1,20 +1,23 @@
-package com.trustmenet.repositories.entities;
+package com.trustmenet.repositories.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class Announcement {
+@NoArgsConstructor
+public class AnnouncementDto {
     private int id;
     private String authorLogin;
     private int authorId;
 
+    @JsonProperty("isPublished")
     private boolean isPublished;
 
     private Date createdDate;

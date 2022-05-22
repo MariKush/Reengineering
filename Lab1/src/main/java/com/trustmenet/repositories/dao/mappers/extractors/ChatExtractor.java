@@ -1,8 +1,7 @@
 package com.trustmenet.repositories.dao.mappers.extractors;
 
-import com.trustmenet.repositories.entities.UserDto;
 import com.trustmenet.repositories.entities.Chat;
-// import com.trustmenet.repositories.entities.Image;
+import com.trustmenet.repositories.entities.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -17,7 +16,7 @@ public class ChatExtractor implements ResultSetExtractor<List<Chat>> {
     @Override
     public List<Chat> extractData(ResultSet rs) throws SQLException, DataAccessException {
         Map<Integer, Chat> chatMap = new HashMap<>();
-        Map<Integer, UserDto> userMap = new HashMap<>();
+        Map<Integer, User> userMap = new HashMap<>();
 
         while (rs.next()) {
             int chatId = rs.getInt("chat_id");
@@ -27,11 +26,11 @@ public class ChatExtractor implements ResultSetExtractor<List<Chat>> {
                 chatMap.put(chatId, chat);
             }
 
-            List<UserDto> users = chat.getUsers();
+            List<User> users = chat.getUsers();
 
             int userId = rs.getInt("user_id");
             if (userId != 0) {
-                UserDto user = userMap.get(userId);
+                User user = userMap.get(userId);
                 if (user == null) {
                     user = buildUser(rs, userId);
                     userMap.put(userId, user);
@@ -42,8 +41,8 @@ public class ChatExtractor implements ResultSetExtractor<List<Chat>> {
         return new ArrayList<>(chatMap.values());
     }
 
-    private UserDto buildUser(ResultSet rs, int userId) throws SQLException {
-        return UserDto.builder()
+    private User buildUser(ResultSet rs, int userId) throws SQLException {
+        return User.builder()
                 .id(userId)
                 .login(rs.getString("login"))
                 .firstName(rs.getString("first_name"))

@@ -1,4 +1,4 @@
-package com.trustmenet.repositories.entities.enums;
+package com.trustmenet.repositories.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

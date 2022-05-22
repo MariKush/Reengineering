@@ -1,9 +1,9 @@
-package com.trustmenet.repositories.entities;
+package com.trustmenet.repositories.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trustmenet.repositories.entities.enums.Role;
-import com.trustmenet.repositories.entities.enums.UserAccountStatus;
+import com.trustmenet.repositories.enums.Role;
+import com.trustmenet.repositories.enums.UserAccountStatus;
 import lombok.Builder;
 import lombok.Data;
 

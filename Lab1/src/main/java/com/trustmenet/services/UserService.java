@@ -1,8 +1,10 @@
 package com.trustmenet.services;
 
 
+import com.trustmenet.mapper.UserMapper;
 import com.trustmenet.repositories.dao.UserDao;
-import com.trustmenet.repositories.entities.UserDto;
+import com.trustmenet.repositories.dto.UserDto;
+import com.trustmenet.repositories.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,15 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserMapper userMapper;
 
     public UserDto getUserById(int id){
-        return userDao.get(id);
+        return userMapper.toDto(userDao.get(id));
     }
 
     public void updateUserProfile(UserDto editedUser) {
-        UserDto currentUser = userDao.getUserByLogin(editedUser.getLogin());
+        User currentUser = userDao.getUserByLogin(editedUser.getLogin());
 
         currentUser.setFirstName(editedUser.getFirstName());
         currentUser.setSecondName(editedUser.getSecondName());
@@ -38,12 +42,12 @@ public class UserService {
     }
 
     public boolean checkPasswords(String login, String password) {
-        UserDto currentUser = userDao.getUserByLogin(login);
+        User currentUser = userDao.getUserByLogin(login);
         return passwordEncoder.matches(password, currentUser.getPassword());
     }
 
     public List<UserDto> getNextPageOfUsers(int usersCount) {
-        return userDao.getUsersPage(10, usersCount);
+        return userMapper.toDto(userDao.getUsersPage(10, usersCount));
     }
 
     public boolean addUserFriend(int userId, int friendId) {
@@ -64,7 +68,7 @@ public class UserService {
     }
 
     public List<UserDto> getUserFriends(int userId) {
-        return userDao.getUserFriends(userId);
+        return userMapper.toDto(userDao.getUserFriends(userId));
     }
 
     public boolean appointToModer(int userId) {

@@ -2,6 +2,7 @@ package com.trustmenet.controllers;
 
 
 import com.google.gson.Gson;
+import com.trustmenet.repositories.dto.MessageDto;
 import com.trustmenet.repositories.dto.WebsocketEvent;
 import com.trustmenet.repositories.entities.Message;
 import com.trustmenet.services.MessageService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -42,8 +42,8 @@ public class MessageController {
     }
 
     @GetMapping("api/v1/chat/{chatId}/messages")
-    public List<Message> getChatMessages(@PathVariable int chatId,
-                                         @RequestParam(value = "pageNumber") int pageNumber) {
+    public List<MessageDto> getChatMessages(@PathVariable int chatId,
+                                            @RequestParam(value = "pageNumber") int pageNumber) {
         return messageService.getPageMessages(chatId, pageNumber, 10).toList();
     }
 }

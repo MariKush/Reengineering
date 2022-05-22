@@ -1,6 +1,8 @@
 package com.trustmenet.services;
 
+import com.trustmenet.mapper.ChatMapper;
 import com.trustmenet.repositories.dao.ChatDao;
+import com.trustmenet.repositories.dto.ChatDto;
 import com.trustmenet.repositories.entities.Chat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +16,18 @@ public class ChatService {
     @Autowired
     private ChatDao chatDao;
 
-    public List<Chat> getAllChatsForUser(int userId) {
+    @Autowired
+    private ChatMapper chatMapper;
+
+    public List<ChatDto> getAllChatsForUser(int userId) {
         validateUserIdNotZero(userId);
-        return chatDao.getAllFullInfoForUser(userId);
+        return chatMapper.toDto(chatDao.getAllFullInfoForUser(userId));
     }
 
 
-    public Chat getFullChatInfo(int chatId) {
+    public ChatDto getFullChatInfo(int chatId) {
         validateChatId(chatId);
-        return chatDao.getFullInfo(chatId);
+        return chatMapper.toDto(chatDao.getFullInfo(chatId));
     }
 
     public void addMemberToChat(int chatId, int userId) {
@@ -52,7 +57,8 @@ public class ChatService {
         }
     }
 
-    public int createChat(Chat chat, int userId) {
+    public int createChat(ChatDto chatDto, int userId) {
+        Chat chat = chatMapper.toEntity(chatDto);
         int chatId = chatDao.save(chat);
         if (chatId != -1) {
             chatDao.addChatMember(chatId, userId);
@@ -60,7 +66,8 @@ public class ChatService {
         return chatId;
     }
 
-    public void updateChat(Chat chat) {
+    public void updateChat(ChatDto chatDto) {
+        Chat chat = chatMapper.toEntity(chatDto);
         chatDao.update(chat);
     }
 }

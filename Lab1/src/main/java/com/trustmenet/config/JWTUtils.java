@@ -1,6 +1,6 @@
 package com.trustmenet.config;
 
-import com.trustmenet.repositories.entities.enums.Role;
+import com.trustmenet.repositories.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

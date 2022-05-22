@@ -1,5 +1,4 @@
-package com.trustmenet.repositories.entities;
-
+package com.trustmenet.repositories.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +12,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Achievement {
+public class AchievementDto {
     private int id;
     private String name;
     private String description;
-    private List<AchievementCondition> achievementConditions;
+    @NotEmpty
+    private List<AchievementConditionDto> achievementConditions;
 }
